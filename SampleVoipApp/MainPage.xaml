@@ -18,5 +18,8 @@
                 FontFamily="Segoe UI Symbol" 
                 Content="{x:Bind Mode=OneWay, Path=theCallManager.CallState, Converter={StaticResource CallStateToGlyph}}" 
                 HorizontalAlignment="Left" Margin="10,71,0,0" VerticalAlignment="Top" Height="38" Width="82" Click="Button_Click"/>
+        <StackPanel Orientation="Horizontal">
+            <CaptureElement Name="CapturePreview" Width="320" Height="240"/>
+        </StackPanel>
     </Grid>
 </Page>

@@ -31,7 +31,7 @@ namespace SampleVoipApp
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            theCallManager.Toggle();
+            theCallManager.Toggle(CapturePreview);
         }
 
         public CallManager theCallManager { get; set; }

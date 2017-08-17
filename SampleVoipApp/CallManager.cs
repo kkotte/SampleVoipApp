@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.ComponentModel;
 
@@ -15,7 +16,9 @@ namespace SampleVoipApp
 
     public class CallManager : INotifyPropertyChanged
     {
+        private Windows.Media.Capture.MediaCapture captureElement;
         public CallState _callState = CallState.NoCall;
+
         public CallState CallState
         {
             get { return _callState; }
@@ -29,9 +32,29 @@ namespace SampleVoipApp
             }
         }
         
-        public void Toggle()
+        async public void Toggle(Windows.UI.Xaml.Controls.CaptureElement preview)
         {
-            CallState = (CallState == CallState.NoCall) ? CallState.InCall : CallState.NoCall;
+            if (CallState == CallState.NoCall)
+            {
+                // Start call
+                captureElement = new Windows.Media.Capture.MediaCapture();
+                await captureElement.InitializeAsync();
+
+                preview.Source = captureElement;
+                await captureElement.StartPreviewAsync();
+
+                CallState = CallState.InCall;
+            }
+            else if (CallState == CallState.InCall)
+            {
+                // Stop call
+                await captureElement.StopPreviewAsync();
+                preview.Source = null;
+
+                captureElement.Dispose();
+                captureElement = null;
+                CallState = CallState.NoCall;
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
